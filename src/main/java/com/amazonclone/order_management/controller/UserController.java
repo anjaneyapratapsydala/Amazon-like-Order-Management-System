@@ -1,5 +1,7 @@
 package com.amazonclone.order_management.controller;
 
+import com.amazonclone.order_management.dto.LoginRequest;
+import com.amazonclone.order_management.dto.LoginResponse;
 import com.amazonclone.order_management.dto.RegisterRequest;
 import com.amazonclone.order_management.dto.UserResponse;
 import com.amazonclone.order_management.entity.User;
@@ -28,5 +30,16 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        String token = userService.login(request);
+
+        return ResponseEntity.ok(
+                new LoginResponse(token)
+        );
     }
 }

@@ -10,6 +10,7 @@ public class UserResponse{
     @Getter
     private String email;
 
+
     public UserResponse(Long id, String name, String email) {
         this.id = id;
         this.name = name;

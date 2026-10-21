@@ -3,6 +3,7 @@ package com.amazonclone.order_management.service;
 import com.amazonclone.order_management.dto.LoginRequest;
 import com.amazonclone.order_management.dto.RegisterRequest;
 import com.amazonclone.order_management.dto.UserResponse;
+import com.amazonclone.order_management.entity.Role;
 import com.amazonclone.order_management.entity.User;
 import com.amazonclone.order_management.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,7 +57,8 @@ public class UserService {
         User user = new User(
                 request.getName(),
                 request.getEmail(),
-                encodedPassword
+                encodedPassword,
+                Role.USER
         );
 
         User savedUser = userRepository.save(user);

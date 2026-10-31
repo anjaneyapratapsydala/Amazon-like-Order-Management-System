@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.amazonclone.order_management.exception.DuplicateResourceException;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -47,7 +49,7 @@ public class UserService {
 
     public UserResponse register(RegisterRequest request){
         if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already Exists");
+            throw new DuplicateResourceException("Email already Exists");
         }
 
         String encodedPassword =

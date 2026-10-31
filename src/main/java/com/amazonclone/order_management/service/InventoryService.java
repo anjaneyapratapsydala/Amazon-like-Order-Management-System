@@ -4,6 +4,9 @@ import com.amazonclone.order_management.dto.CreateInventoryRequest;
 import com.amazonclone.order_management.dto.InventoryResponse;
 import com.amazonclone.order_management.entity.Inventory;
 import com.amazonclone.order_management.entity.Product;
+import com.amazonclone.order_management.exception.DuplicateResourceException;
+import com.amazonclone.order_management.exception.InsufficientInventoryException;
+import com.amazonclone.order_management.exception.ResourceNotFoundException;
 import com.amazonclone.order_management.repository.InventoryRepository;
 import com.amazonclone.order_management.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +33,7 @@ public class InventoryService {
         if (inventoryRepository
                 .existsByProductId(request.getProductId())) {
 
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Inventory already exists for product"
             );
         }
@@ -39,7 +42,7 @@ public class InventoryService {
                 productRepository.findById(
                         request.getProductId()
                 ).orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Product not found"
                         )
                 );
@@ -64,7 +67,7 @@ public class InventoryService {
                 inventoryRepository
                         .findByProductId(productId)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Inventory not found"
                                 )
                         );
@@ -81,7 +84,7 @@ public class InventoryService {
                 inventoryRepository
                         .findByProductIdForUpdate(productId)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Inventory not found"
                                 )
                         );
@@ -90,7 +93,7 @@ public class InventoryService {
                 inventory.getAvailableQuantity();
 
         if (available < quantity) {
-            throw new RuntimeException(
+            throw new InsufficientInventoryException(
                     "Insufficient inventory"
             );
         }

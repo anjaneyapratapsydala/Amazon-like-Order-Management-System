@@ -4,6 +4,8 @@ import com.amazonclone.order_management.dto.CreateProductRequest;
 import com.amazonclone.order_management.dto.ProductResponse;
 import com.amazonclone.order_management.entity.Category;
 import com.amazonclone.order_management.entity.Product;
+import com.amazonclone.order_management.exception.DuplicateResourceException;
+import com.amazonclone.order_management.exception.ResourceNotFoundException;
 import com.amazonclone.order_management.repository.CategoryRepository;
 import com.amazonclone.order_management.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ public class ProductService {
             CreateProductRequest request) {
 
         if (productRepository.existsBySku(request.getSku())) {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Product with this SKU already exists"
             );
         }
@@ -37,7 +39,7 @@ public class ProductService {
                 categoryRepository.findById(
                         request.getCategoryId()
                 ).orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Category not found"
                         )
                 );
@@ -69,7 +71,7 @@ public class ProductService {
         Product product =
                 productRepository.findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Product not found"
                                 )
                         );
